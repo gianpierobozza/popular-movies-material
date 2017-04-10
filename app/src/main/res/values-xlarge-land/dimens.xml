@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="two_pane_left_width">300dp</dimen>
+
+    <integer name="grid_columns">2</integer>
+</resources>

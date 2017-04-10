@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_sorting_option_labels">
+        <item>@string/pref_sorting_label_popular</item>
+        <item>@string/pref_sorting_label_rated</item>
+        <item>@string/pref_sorting_label_favourites</item>
+    </array>
+
+    <array name="pref_sorting_option_values">
+        <item>@string/pref_sorting_popular_value</item>
+        <item>@string/pref_sorting_rated_value</item>
+        <item>@string/pref_sorting_favourites_value</item>
+    </array>
+
+    <array name="pref_locale_option_labels">
+        <item>@string/pref_locale_label_enUS</item>
+        <item>@string/pref_locale_label_enGB</item>
+        <item>@string/pref_locale_label_itIT</item>
+        <item>@string/pref_locale_label_esES</item>
+        <item>@string/pref_locale_label_frFR</item>
+        <item>@string/pref_locale_label_deDE</item>
+    </array>
+
+    <array name="pref_locale_option_values">
+        <item>@string/pref_locale_enUS_value</item>
+        <item>@string/pref_locale_enGB_value</item>
+        <item>@string/pref_locale_itIT_value</item>
+        <item>@string/pref_locale_esES_value</item>
+        <item>@string/pref_locale_frFR_value</item>
+        <item>@string/pref_locale_deDE_value</item>
+    </array>
+</resources>

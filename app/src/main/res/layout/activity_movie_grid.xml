@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_movie_grid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gbozza.android.popularmovies.activities.MovieGridActivity">
+
+    <fragment
+        android:name="com.gbozza.android.popularmovies.fragments.MovieGridFragment"
+        android:id="@+id/movie_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/movie_grid" />
+
+</FrameLayout>

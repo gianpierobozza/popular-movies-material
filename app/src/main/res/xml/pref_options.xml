@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/pref_sorting_popular_value"
+        android:entries="@array/pref_sorting_option_labels"
+        android:entryValues="@array/pref_sorting_option_values"
+        android:key="@string/pref_sorting_key"
+        android:title="@string/pref_sorting_label" />
+
+    <ListPreference
+        android:defaultValue="@string/pref_locale_enUS_value"
+        android:entries="@array/pref_locale_option_labels"
+        android:entryValues="@array/pref_locale_option_values"
+        android:key="@string/pref_locale_key"
+        android:title="@string/pref_locale_label" />
+
+</PreferenceScreen>

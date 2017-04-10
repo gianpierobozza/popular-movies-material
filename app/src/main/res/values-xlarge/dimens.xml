@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_view_text_size">20sp</dimen>
+    <dimen name="movie_detail_text_size">30sp</dimen>
+    <dimen name="movie_detail_videos_text_size">24sp</dimen>
+    <dimen name="two_pane_left_width">250dp</dimen>
+
+    <integer name="grid_columns">2</integer>
+    <string name="poster_size">w185</string>
+</resources>
