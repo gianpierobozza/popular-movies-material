@@ -32,7 +32,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
@@ -44,16 +43,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                     .add(R.id.movie_detail_container, fragment)
                     .commit();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cv_popular_movie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="3dp"
+        app:cardElevation="@dimen/movie_grid_card_view_elevation"
         card_view:cardCornerRadius="20dp">
 
         <RelativeLayout
@@ -40,7 +41,7 @@
                 android:layout_below="@id/pb_movie_poster"
                 android:layout_margin="20dp"
                 android:textColor="@android:color/holo_red_light"
-                android:textSize="@dimen/card_view_text_size"
+                android:textSize="@dimen/movie_grid_card_view_text_size"
                 android:text="@string/error_movie_poster"
                 android:textAlignment="center"
                 android:visibility="invisible" />
@@ -52,7 +53,7 @@
                 android:layout_below="@id/tv_movie_poster_error"
                 android:padding="5dp"
                 android:textColor="#4c4c4c"
-                android:textSize="@dimen/card_view_text_size"
+                android:textSize="@dimen/movie_grid_card_view_text_size"
                 android:textAlignment="center" />
 
         </RelativeLayout>

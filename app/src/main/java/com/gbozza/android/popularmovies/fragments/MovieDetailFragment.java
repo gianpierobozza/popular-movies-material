@@ -22,15 +22,20 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +49,6 @@ import com.gbozza.android.popularmovies.models.Video;
 import com.gbozza.android.popularmovies.utilities.MovieDbJsonUtilities;
 import com.gbozza.android.popularmovies.utilities.NetworkUtilities;
 import com.gbozza.android.popularmovies.utilities.SpannableUtilities;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -58,7 +62,6 @@ import java.util.Map;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MovieDetailFragment extends Fragment {
 
@@ -67,23 +70,35 @@ public class MovieDetailFragment extends Fragment {
     private VideosAdapter mVideosAdapter;
     private ReviewsAdapter mReviewsAdapter;
 
-    @BindView(R.id.iv_movie_detail_backdrop) ImageView mMovieBackdropImageView;
-    @BindView(R.id.pb_movie_detail_poster) ProgressBar mMoviePosterProgressBar;
-    @BindView(R.id.tv_movie_detail_vote_average) TextView mMovieVoteAverageTextView;
-    @BindView(R.id.tv_movie_detail_release_date) TextView mMovieReleaseDateTextView;
-    @BindView(R.id.tv_movie_detail_overview) TextView mMovieOverviewTextView;
-    @BindView(R.id.tv_movie_detail_poster_error) TextView mMoviePosterErrorTextView;
+    @BindView(R.id.collapsing_toolbar_movie_detail)
+    CollapsingToolbarLayout mMovieCollapsingToolbarLayout;
+    @BindView(R.id.toolbar_movie_detail)
+    Toolbar mMovieToolbar;
+    @BindView(R.id.backdrop_movie_detail_scrolling_top)
+    ImageView mMovieBackdropImageView;
+    @BindView(R.id.tv_movie_detail_vote_average)
+    TextView mMovieVoteAverageTextView;
+    @BindView(R.id.tv_movie_detail_release_date)
+    TextView mMovieReleaseDateTextView;
+    @BindView(R.id.tv_movie_detail_overview)
+    TextView mMovieOverviewTextView;
 
-    @BindView(R.id.rv_videos) RecyclerView mVideosRecyclerView;
-    @BindView(R.id.rv_reviews) RecyclerView mReviewsRecyclerView;
-    @BindView(R.id.iv_movie_favourite) ImageView mMovieFavouriteImageView;
+    @BindView(R.id.rv_videos)
+    RecyclerView mVideosRecyclerView;
+    @BindView(R.id.rv_reviews)
+    RecyclerView mReviewsRecyclerView;
 
-    @BindString(R.string.movie_detail_vote_average) String mDetailVoteAvgLabel;
-    @BindString(R.string.movie_detail_release_date) String mDetailReleaseDateLabel;
-    @BindString(R.string.movie_detail_overview) String mDetailOverviewLabel;
+    @BindString(R.string.movie_detail_vote_average)
+    String mDetailVoteAvgLabel;
+    @BindString(R.string.movie_detail_release_date)
+    String mDetailReleaseDateLabel;
+    @BindString(R.string.movie_detail_overview)
+    String mDetailOverviewLabel;
 
-    @BindString(R.string.movie_favourite_off_toast_msg) String mFavOffToastMsg;
-    @BindString(R.string.movie_favourite_on_toast_msg) String mFavOnToastMsg;
+    @BindString(R.string.movie_favourite_off_toast_msg)
+    String mFavOffToastMsg;
+    @BindString(R.string.movie_favourite_on_toast_msg)
+    String mFavOnToastMsg;
 
     public static final String PARCELABLE_MOVIE_KEY = "movieObject";
     private static final String BUNDLE_VIDEOS_KEY = "videoList";
@@ -106,27 +121,17 @@ public class MovieDetailFragment extends Fragment {
         if (null != mMovie) {
             View rootView = inflater.inflate(R.layout.movie_detail, container, false);
             ButterKnife.bind(this, rootView);
-            getActivity().setTitle(mMovie.getOriginalTitle());
+            mMovieCollapsingToolbarLayout.setTitle(mMovie.getOriginalTitle());
 
-            if (checkFavourite(mMovie.getId())) {
-                mMovieFavouriteImageView.setBackgroundResource(R.drawable.ic_star);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(mMovieToolbar);
+            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                setHasOptionsMenu(true);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
 
             Picasso.with(mContext)
                     .load(mMovie.buildBackdropPath(mContext))
-                    .into(mMovieBackdropImageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            mMoviePosterProgressBar.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            mMoviePosterProgressBar.setVisibility(View.GONE);
-                            mMoviePosterErrorTextView.setRotation(-20);
-                            mMoviePosterErrorTextView.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    .into(mMovieBackdropImageView);
 
             mMovieVoteAverageTextView.append(SpannableUtilities.makeBold(mDetailVoteAvgLabel));
             mMovieVoteAverageTextView.append(mMovie.getVoteAverage());
@@ -136,6 +141,7 @@ public class MovieDetailFragment extends Fragment {
             mMovieOverviewTextView.append(mMovie.getOverview());
 
             LinearLayoutManager videosLinearLayoutManager = new LinearLayoutManager(mContext);
+            videosLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             mVideosRecyclerView.setLayoutManager(videosLinearLayoutManager);
 
             mVideosRecyclerView.setHasFixedSize(true);
@@ -227,32 +233,46 @@ public class MovieDetailFragment extends Fragment {
         return favourite;
     }
 
-    /**
-     * This method performs the insert or delete of a movie from the favourite database
-     */
-    @OnClick(R.id.iv_movie_favourite)
-    public void favouriteMovie() {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.detail, menu);
         if (checkFavourite(mMovie.getId())) {
-            Uri removeFavouriteUri = FavouriteMoviesContract.FavouriteMovieEntry.buildFavouriteUriWithMovieId(mMovie.getId());
-            getActivity().getContentResolver().delete(removeFavouriteUri, null, null);
-            Toast.makeText(getActivity().getBaseContext(), mFavOffToastMsg, Toast.LENGTH_LONG).show();
-            mMovieFavouriteImageView.setBackgroundResource(R.drawable.ic_star_border_black);
-        } else {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_BACKDROP_PATH, mMovie.getBackdropPath());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_POSTER_PATH, mMovie.getPosterPath());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_OVERVIEW, mMovie.getOverview());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_TITLE, mMovie.getOriginalTitle());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
-            contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_VOTE_AVERAGE, mMovie.getVoteAverage());
-            Uri favouriteUri = getActivity().getContentResolver().insert(FavouriteMoviesContract.FavouriteMovieEntry.CONTENT_URI, contentValues);
-
-            if (null != favouriteUri) {
-                Toast.makeText(getActivity().getBaseContext(), mFavOnToastMsg, Toast.LENGTH_LONG).show();
-                mMovieFavouriteImageView.setBackgroundResource(R.drawable.ic_star);
-            }
+            menu.getItem(0).setIcon(R.drawable.ic_star);
         }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            case R.id.action_favourite:
+                if (checkFavourite(mMovie.getId())) {
+                    Uri removeFavouriteUri = FavouriteMoviesContract.FavouriteMovieEntry.buildFavouriteUriWithMovieId(mMovie.getId());
+                    getActivity().getContentResolver().delete(removeFavouriteUri, null, null);
+                    Toast.makeText(getActivity().getBaseContext(), mFavOffToastMsg, Toast.LENGTH_LONG).show();
+                    item.setIcon(R.drawable.ic_star_border_white);
+                } else {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_BACKDROP_PATH, mMovie.getBackdropPath());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_POSTER_PATH, mMovie.getPosterPath());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_OVERVIEW, mMovie.getOverview());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_TITLE, mMovie.getOriginalTitle());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
+                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_VOTE_AVERAGE, mMovie.getVoteAverage());
+                    Uri favouriteUri = getActivity().getContentResolver().insert(FavouriteMoviesContract.FavouriteMovieEntry.CONTENT_URI, contentValues);
+
+                    if (null != favouriteUri) {
+                        Toast.makeText(getActivity().getBaseContext(), mFavOnToastMsg, Toast.LENGTH_LONG).show();
+                        item.setIcon(R.drawable.ic_star);
+                    }
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -260,7 +280,7 @@ public class MovieDetailFragment extends Fragment {
      * Using an Inner class to avoid convolution when having to manipulate the
      * View elements in the fragment.
      */
-    public class FetchVideosTask extends AsyncTask<String[], Void, List<Video>> {
+    private class FetchVideosTask extends AsyncTask<String[], Void, List<Video>> {
 
         private final String TAG = FetchVideosTask.class.getSimpleName();
 
@@ -303,7 +323,7 @@ public class MovieDetailFragment extends Fragment {
      * Using an Inner class to avoid convolution when having to manipulate the
      * View elements in the fragment.
      */
-    public class FetchReviewsTask extends AsyncTask<String[], Void, List<Review>> {
+    private class FetchReviewsTask extends AsyncTask<String[], Void, List<Review>> {
 
         private final String TAG = FetchReviewsTask.class.getSimpleName();
 

@@ -1,100 +1,52 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie_detail"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_margin="10dp"
-    tools:context="com.gbozza.android.popularmovies.fragments.MovieDetailFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.gbozza.android.popularmovies.fragments.MovieDetailFragment" >
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_movie_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp">
+        android:layout_height="@dimen/app_bar_height"
+        android:stateListAnimator="@drawable/movie_detail_appbar_elevated"
+        android:theme="@style/AppTheme.AppBarOverlay" >
 
-        <ImageView
-            android:id="@+id/iv_movie_detail_backdrop"
-            android:contentDescription="@string/backdrop_image_alt"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_movie_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <ProgressBar
-            android:id="@+id/pb_movie_detail_poster"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@+id/iv_movie_detail_backdrop"
-            android:layout_centerHorizontal="true" />
+            <ImageView
+                android:id="@+id/backdrop_movie_detail_scrolling_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/backdrop_image_alt"
+                app:layout_collapseMode="parallax" />
 
-        <ImageView
-            android:id="@+id/iv_movie_favourite"
-            android:contentDescription="@string/favourite_image_alt"
-            android:src="@drawable/ic_star_border_black"
-            android:layout_below="@+id/iv_movie_detail_backdrop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/backdrop_bg"
+                android:layout_gravity="center_horizontal|bottom"/>
 
-        <TextView
-            android:id="@+id/tv_movie_detail_vote_average"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iv_movie_favourite"
-            android:textSize="@dimen/movie_detail_text_size" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_movie_detail"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <TextView
-            android:id="@+id/tv_movie_detail_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_movie_detail_vote_average"
-            android:textSize="@dimen/movie_detail_text_size" />
+        </android.support.design.widget.CollapsingToolbarLayout>
 
-        <TextView
-            android:id="@+id/tv_movie_detail_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_movie_detail_release_date"
-            android:textSize="@dimen/movie_detail_text_size" />
+    </android.support.design.widget.AppBarLayout>
 
-        <TextView
-            android:id="@+id/tv_movie_detail_poster_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_movie_detail_overview"
-            android:layout_margin="30dp"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="@dimen/card_view_text_size"
-            android:text="@string/error_movie_poster"
-            android:textAlignment="center"
-            android:visibility="invisible" />
+    <include layout="@layout/movie_detail_content" />
 
-        <View
-            android:id="@+id/videos_divider"
-            android:layout_below="@+id/tv_movie_detail_overview"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:padding="16dp"
-            android:background="@android:color/darker_gray" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_videos"
-            android:layout_below="@+id/videos_divider"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <View
-            android:id="@+id/reviews_divider"
-            android:layout_below="@+id/rv_videos"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:padding="16dp"
-            android:background="@android:color/darker_gray" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_reviews"
-            android:layout_below="@+id/reviews_divider"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </RelativeLayout>
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

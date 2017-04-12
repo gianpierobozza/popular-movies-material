@@ -312,7 +312,7 @@ public class MovieGridFragment extends Fragment implements
      * Using an Inner class to avoid convolution when having to manipulate the
      * View elements in the fragment.
      */
-    public class FetchMoviesTask extends AsyncTask<String[], Void, List<Movie>> {
+    private class FetchMoviesTask extends AsyncTask<String[], Void, List<Movie>> {
 
         private final String TAG = FetchMoviesTask.class.getSimpleName();
 

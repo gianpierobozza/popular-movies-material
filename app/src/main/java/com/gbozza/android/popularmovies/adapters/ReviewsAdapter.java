@@ -16,12 +16,14 @@ package com.gbozza.android.popularmovies.adapters;
  * limitations under the License.
  */
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gbozza.android.popularmovies.R;
@@ -48,8 +50,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_review_author) TextView mReviewAuthorTextView;
         @BindView(R.id.tv_review_content) TextView mReviewContentTextView;
-        @BindView(R.id.tv_review_see_more) TextView mReviewSeeMoreTextView;
-        @BindView(R.id.tv_review_collapse) TextView mReviewCollapseTextView;
+        @BindView(R.id.iv_review_see_more) ImageView mReviewSeeMoreImageView;
+        Context mContext;
 
         /**
          * Constructor to the ViewHolder class
@@ -59,6 +61,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
         ReviewsAdapterViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            mContext = view.getContext();
         }
     }
 
@@ -80,20 +83,23 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
         reviewsAdapterViewHolder.mReviewAuthorTextView.append(SpannableUtilities.makeBold(mDetailReviewByLabel));
         reviewsAdapterViewHolder.mReviewAuthorTextView.append(review.getAuthor());
         reviewsAdapterViewHolder.mReviewContentTextView.setText(review.getContent());
-        reviewsAdapterViewHolder.mReviewSeeMoreTextView.setOnClickListener(new View.OnClickListener() {
+        reviewsAdapterViewHolder.mReviewSeeMoreImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reviewsAdapterViewHolder.mReviewContentTextView.setMaxLines(Integer.MAX_VALUE);
-                reviewsAdapterViewHolder.mReviewCollapseTextView.setVisibility(View.VISIBLE);
-                reviewsAdapterViewHolder.mReviewSeeMoreTextView.setVisibility(View.INVISIBLE);
-            }
-        });
-        reviewsAdapterViewHolder.mReviewCollapseTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewsAdapterViewHolder.mReviewContentTextView.setMaxLines(4);
-                reviewsAdapterViewHolder.mReviewCollapseTextView.setVisibility(View.INVISIBLE);
-                reviewsAdapterViewHolder.mReviewSeeMoreTextView.setVisibility(View.VISIBLE);
+                int reviewContentLines = TextViewCompat.getMaxLines(reviewsAdapterViewHolder.mReviewContentTextView);
+                int reviewCollapsedMaxLines = reviewsAdapterViewHolder.mContext
+                        .getResources().getInteger(R.integer.review_collapsed_max_lines);
+                if (reviewContentLines != reviewCollapsedMaxLines) {
+                    reviewsAdapterViewHolder.mReviewContentTextView.setMaxLines(reviewCollapsedMaxLines);
+                    reviewsAdapterViewHolder.mReviewSeeMoreImageView.setImageResource(R.drawable.ic_expand_more);
+                } else {
+                    ObjectAnimator animation = ObjectAnimator.ofInt(
+                            reviewsAdapterViewHolder.mReviewContentTextView,
+                            "maxLines",
+                            9999);
+                    animation.setDuration(1000).start();
+                    reviewsAdapterViewHolder.mReviewSeeMoreImageView.setImageResource(R.drawable.ic_expand_less);
+                }
             }
         });
     }

@@ -10,12 +10,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_rules" >
         <activity
             android:name=".activities.MovieGridActivity">
-            <intent-filter>
+            <intent-filter android:label="@string/filter_label_popularmovies">
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"
+                    android:host="www.gianpierobozza.it"
+                    android:pathPrefix="/popularmovies" />
+                <data android:scheme="gianpierobozza"
+                    android:host="popularmovies" />
             </intent-filter>
         </activity>
 
@@ -30,7 +38,8 @@
 
         <activity
             android:name=".activities.MovieDetailActivity"
-            android:parentActivityName=".activities.MovieGridActivity">
+            android:parentActivityName=".activities.MovieGridActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MovieGridActivity" />

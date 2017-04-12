@@ -19,17 +19,17 @@ package com.gbozza.android.popularmovies.adapters;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.gbozza.android.popularmovies.R;
 import com.gbozza.android.popularmovies.models.Video;
+import com.gbozza.android.popularmovies.utilities.MovieTrailerCallback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -52,9 +52,10 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
     /**
      * Inner class to represent the ViewHolder for the Adapter
      */
-    class VideosAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class VideosAdapterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_video_thumbnail) ImageView mVideoThumbImageView;
-        @BindView(R.id.tv_video_name) TextView mVideoNameTextView;
+        @BindView(R.id.pb_trailer_loading_indicator) public ProgressBar mMovieTrailerProgressBar;
+        @BindView(R.id.iv_video_thumbnail_error) public ImageView mMovieTrailerThumbnailError;
         Context mContext;
 
         /**
@@ -85,8 +86,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
         final Video video = mVideoList.get(position);
         Picasso.with(videosAdapterViewHolder.mContext)
                 .load(buildVideoUrl(video.getKey()))
-                .into(videosAdapterViewHolder.mVideoThumbImageView);
-        videosAdapterViewHolder.mVideoNameTextView.setText(video.getName());
+                .into(videosAdapterViewHolder.mVideoThumbImageView, new MovieTrailerCallback(videosAdapterViewHolder));
 
         videosAdapterViewHolder.mVideoThumbImageView.setOnClickListener(new View.OnClickListener() {
             @Override
