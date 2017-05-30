@@ -16,7 +16,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.MovieDetail">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_columnSpan="1"
             android:layout_gravity="start"
-            android:textSize="20sp"
+            android:textSize="@dimen/movie_detail_reviews_author_text_size"
             tools:text="Review by: John Doe" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:maxLines="@integer/review_collapsed_max_lines"
-            android:textSize="18sp"
+            android:textSize="@dimen/movie_detail_reviews_content_text_size"
             tools:text="@string/lorem_ipsum_1" />
 
         <ImageView

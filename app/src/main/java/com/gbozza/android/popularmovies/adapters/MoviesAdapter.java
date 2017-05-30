@@ -138,33 +138,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
                 if (MovieGridFragment.mMenuMultipleActionsUp.isExpanded()) {
                     MovieGridFragment.mMenuMultipleActionsUp.collapse();
                 }
-                if (moviesAdapterViewHolder.checkTwoPane(moviesAdapterViewHolder.mSelectedConfiguration)) {
-                    Bundle arguments = new Bundle();
-                    arguments.putParcelable(MovieDetailFragment.PARCELABLE_MOVIE_KEY, movie);
-                    MovieDetailFragment fragment = new MovieDetailFragment();
-                    fragment.setArguments(arguments);
-                    moviesAdapterViewHolder.mFragmentManager.beginTransaction()
-                            .replace(R.id.movie_detail_container, fragment)
-                            .commit();
+                Intent movieDetailIntent = new Intent(view.getContext(), MovieDetailActivity.class);
+                int position = (int) view.getTag(R.id.card_view_item);
+                movieDetailIntent.putExtra(INTENT_MOVIE_KEY, mMovieList.get(position));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Bundle transition = ActivityOptions
+                            .makeSceneTransitionAnimation(((FragmentActivity) view.getContext()))
+                            .toBundle();
+                    view.getContext().startActivity(movieDetailIntent, transition);
                 } else {
-                    Intent movieDetailIntent = new Intent(view.getContext(), MovieDetailActivity.class);
-                    int position = (int) view.getTag(R.id.card_view_item);
-                    movieDetailIntent.putExtra(INTENT_MOVIE_KEY, mMovieList.get(position));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Bundle transition = ActivityOptions
-                                .makeSceneTransitionAnimation(((FragmentActivity) view.getContext()))
-                                .toBundle();
-                        view.getContext().startActivity(movieDetailIntent, transition);
-                    } else {
-                        view.getContext().startActivity(movieDetailIntent);
-                    }
+                    view.getContext().startActivity(movieDetailIntent);
                 }
             }
         });
-
-        if (position == 0 && moviesAdapterViewHolder.checkTwoPane(moviesAdapterViewHolder.mSelectedConfiguration)) {
-            moviesAdapterViewHolder.mPopularMovieCardView.performClick();
-        }
     }
 
     /**
