@@ -50,7 +50,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_review_author) TextView mReviewAuthorTextView;
         @BindView(R.id.tv_review_content) TextView mReviewContentTextView;
-        @BindView(R.id.iv_review_see_more) ImageView mReviewSeeMoreImageView;
+        @BindView(R.id.iv_review_show_more) ImageView mReviewShowMoreImageView;
         Context mContext;
 
         /**
@@ -67,9 +67,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
     @Override
     public ReviewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.reviews_view;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
@@ -83,7 +82,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
         reviewsAdapterViewHolder.mReviewAuthorTextView.append(SpannableUtilities.makeBold(mDetailReviewByLabel));
         reviewsAdapterViewHolder.mReviewAuthorTextView.append(review.getAuthor());
         reviewsAdapterViewHolder.mReviewContentTextView.setText(review.getContent());
-        reviewsAdapterViewHolder.mReviewSeeMoreImageView.setOnClickListener(new View.OnClickListener() {
+        reviewsAdapterViewHolder.mReviewShowMoreImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int reviewContentLines = TextViewCompat.getMaxLines(reviewsAdapterViewHolder.mReviewContentTextView);
@@ -91,14 +90,14 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
                         .getResources().getInteger(R.integer.review_collapsed_max_lines);
                 if (reviewContentLines != reviewCollapsedMaxLines) {
                     reviewsAdapterViewHolder.mReviewContentTextView.setMaxLines(reviewCollapsedMaxLines);
-                    reviewsAdapterViewHolder.mReviewSeeMoreImageView.setImageResource(R.drawable.ic_expand_more);
+                    reviewsAdapterViewHolder.mReviewShowMoreImageView.setImageResource(R.drawable.ic_expand_more);
                 } else {
                     ObjectAnimator animation = ObjectAnimator.ofInt(
                             reviewsAdapterViewHolder.mReviewContentTextView,
                             "maxLines",
                             9999);
                     animation.setDuration(1000).start();
-                    reviewsAdapterViewHolder.mReviewSeeMoreImageView.setImageResource(R.drawable.ic_expand_less);
+                    reviewsAdapterViewHolder.mReviewShowMoreImageView.setImageResource(R.drawable.ic_expand_less);
                 }
             }
         });

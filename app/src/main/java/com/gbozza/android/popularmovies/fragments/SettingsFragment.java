@@ -33,8 +33,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.pref_options);
 
-        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         PreferenceScreen prefScreen = getPreferenceScreen();
+        SharedPreferences sharedPreferences = prefScreen.getSharedPreferences();
         int count = prefScreen.getPreferenceCount();
 
         for (int i = 0; i < count; i++) {

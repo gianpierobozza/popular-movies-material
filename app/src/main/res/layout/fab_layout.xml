@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.getbase.floatingactionbutton.FloatingActionsMenu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/multiple_actions_up"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    app:fab_addButtonColorNormal="@color/colorAccent"
+    app:fab_addButtonColorPressed="@color/colorAccentPressed"
+    app:fab_addButtonPlusIconColor="@color/white"
+    app:fab_expandDirection="up"
+    app:fab_labelStyle="@style/AppTheme.MenuLabelsStyle"
+    android:layout_marginBottom="@dimen/material_padding_margin"
+    android:layout_marginEnd="@dimen/material_padding_margin"
+    android:layout_marginLeft="@dimen/material_padding_margin"
+    android:layout_marginRight="@dimen/material_padding_margin"
+    android:layout_marginStart="@dimen/material_padding_margin"
+    android:layout_marginTop="@dimen/material_padding_margin"
+    android:contentDescription="@string/sorting_fab_label">
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_popular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_icon="@drawable/ic_sort"
+        app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_title="@string/sort_popular"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_rated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_icon="@drawable/ic_sort"
+        app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_title="@string/sort_rated"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_favourites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_icon="@drawable/ic_star_border_white"
+        app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_title="@string/sort_favourites"/>
+
+</com.getbase.floatingactionbutton.FloatingActionsMenu>

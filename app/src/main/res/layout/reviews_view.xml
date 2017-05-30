@@ -36,12 +36,14 @@
             tools:text="@string/lorem_ipsum_1" />
 
         <ImageView
-            android:id="@+id/iv_review_see_more"
+            android:id="@+id/iv_review_show_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnSpan="1"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/movie_detail_see_more"
+            android:background="@drawable/ripple_color_accent"
+            android:clickable="true"
+            android:contentDescription="@string/movie_detail_show_more"
             android:src="@drawable/ic_expand_more" />
 
     </GridLayout>

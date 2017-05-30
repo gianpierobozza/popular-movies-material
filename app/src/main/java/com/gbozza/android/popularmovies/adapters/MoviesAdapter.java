@@ -16,9 +16,11 @@ package com.gbozza.android.popularmovies.adapters;
  * limitations under the License.
  */
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 import com.gbozza.android.popularmovies.R;
 import com.gbozza.android.popularmovies.activities.MovieDetailActivity;
 import com.gbozza.android.popularmovies.fragments.MovieDetailFragment;
+import com.gbozza.android.popularmovies.fragments.MovieGridFragment;
 import com.gbozza.android.popularmovies.models.Movie;
 import com.gbozza.android.popularmovies.utilities.MoviePosterCallback;
 import com.squareup.picasso.Picasso;
@@ -132,6 +135,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         moviesAdapterViewHolder.mPopularMovieCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (MovieGridFragment.mMenuMultipleActionsUp.isExpanded()) {
+                    MovieGridFragment.mMenuMultipleActionsUp.collapse();
+                }
                 if (moviesAdapterViewHolder.checkTwoPane(moviesAdapterViewHolder.mSelectedConfiguration)) {
                     Bundle arguments = new Bundle();
                     arguments.putParcelable(MovieDetailFragment.PARCELABLE_MOVIE_KEY, movie);
@@ -144,7 +150,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
                     Intent movieDetailIntent = new Intent(view.getContext(), MovieDetailActivity.class);
                     int position = (int) view.getTag(R.id.card_view_item);
                     movieDetailIntent.putExtra(INTENT_MOVIE_KEY, mMovieList.get(position));
-                    view.getContext().startActivity(movieDetailIntent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Bundle transition = ActivityOptions
+                                .makeSceneTransitionAnimation(((FragmentActivity) view.getContext()))
+                                .toBundle();
+                        view.getContext().startActivity(movieDetailIntent, transition);
+                    } else {
+                        view.getContext().startActivity(movieDetailIntent);
+                    }
                 }
             }
         });

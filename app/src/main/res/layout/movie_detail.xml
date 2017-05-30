@@ -47,6 +47,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/movie_detail_content" />
+    <include layout="@layout/movie_detail_content"
+        android:id="@+id/movie_detail_content" />
 
 </android.support.design.widget.CoordinatorLayout>

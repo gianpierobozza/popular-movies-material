@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android" android:transitionOrdering="together">
+    <slide android:slideEdge="top">
+        <targets>
+            <target android:targetId="@id/appbar_movie_detail" />
+        </targets>
+    </slide>
+    <slide android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/movie_detail_content" />
+        </targets>
+    </slide>
+</transitionSet>

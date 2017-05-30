@@ -42,7 +42,7 @@ import android.widget.Toast;
 import com.gbozza.android.popularmovies.R;
 import com.gbozza.android.popularmovies.adapters.ReviewsAdapter;
 import com.gbozza.android.popularmovies.adapters.VideosAdapter;
-import com.gbozza.android.popularmovies.data.FavouriteMoviesContract;
+import com.gbozza.android.popularmovies.data.FavouriteMoviesContract.FavouriteMovieEntry;
 import com.gbozza.android.popularmovies.models.Movie;
 import com.gbozza.android.popularmovies.models.Review;
 import com.gbozza.android.popularmovies.models.Video;
@@ -70,35 +70,22 @@ public class MovieDetailFragment extends Fragment {
     private VideosAdapter mVideosAdapter;
     private ReviewsAdapter mReviewsAdapter;
 
-    @BindView(R.id.collapsing_toolbar_movie_detail)
-    CollapsingToolbarLayout mMovieCollapsingToolbarLayout;
-    @BindView(R.id.toolbar_movie_detail)
-    Toolbar mMovieToolbar;
-    @BindView(R.id.backdrop_movie_detail_scrolling_top)
-    ImageView mMovieBackdropImageView;
-    @BindView(R.id.tv_movie_detail_vote_average)
-    TextView mMovieVoteAverageTextView;
-    @BindView(R.id.tv_movie_detail_release_date)
-    TextView mMovieReleaseDateTextView;
-    @BindView(R.id.tv_movie_detail_overview)
-    TextView mMovieOverviewTextView;
+    @BindView(R.id.collapsing_toolbar_movie_detail) CollapsingToolbarLayout mMovieCollapsingToolbarLayout;
+    @BindView(R.id.toolbar_movie_detail) Toolbar mMovieToolbar;
+    @BindView(R.id.backdrop_movie_detail_scrolling_top) ImageView mMovieBackdropImageView;
+    @BindView(R.id.tv_movie_detail_vote_average) TextView mMovieVoteAverageTextView;
+    @BindView(R.id.tv_movie_detail_release_date) TextView mMovieReleaseDateTextView;
+    @BindView(R.id.tv_movie_detail_overview) TextView mMovieOverviewTextView;
 
-    @BindView(R.id.rv_videos)
-    RecyclerView mVideosRecyclerView;
-    @BindView(R.id.rv_reviews)
-    RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.rv_videos) RecyclerView mVideosRecyclerView;
+    @BindView(R.id.rv_reviews) RecyclerView mReviewsRecyclerView;
 
-    @BindString(R.string.movie_detail_vote_average)
-    String mDetailVoteAvgLabel;
-    @BindString(R.string.movie_detail_release_date)
-    String mDetailReleaseDateLabel;
-    @BindString(R.string.movie_detail_overview)
-    String mDetailOverviewLabel;
+    @BindString(R.string.movie_detail_vote_average) String mDetailVoteAvgLabel;
+    @BindString(R.string.movie_detail_release_date) String mDetailReleaseDateLabel;
+    @BindString(R.string.movie_detail_overview) String mDetailOverviewLabel;
 
-    @BindString(R.string.movie_favourite_off_toast_msg)
-    String mFavOffToastMsg;
-    @BindString(R.string.movie_favourite_on_toast_msg)
-    String mFavOnToastMsg;
+    @BindString(R.string.movie_favourite_off_toast_msg) String mFavOffToastMsg;
+    @BindString(R.string.movie_favourite_on_toast_msg) String mFavOnToastMsg;
 
     public static final String PARCELABLE_MOVIE_KEY = "movieObject";
     private static final String BUNDLE_VIDEOS_KEY = "videoList";
@@ -107,8 +94,7 @@ public class MovieDetailFragment extends Fragment {
     private static final String DETAIL_ELEMENT_VIDEOS = "videos";
     private static final String DETAIL_ELEMENT_REVIEWS = "reviews";
 
-    public MovieDetailFragment() {
-    }
+    public MovieDetailFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -220,10 +206,10 @@ public class MovieDetailFragment extends Fragment {
     private boolean checkFavourite(int movieId) {
         boolean favourite = false;
         String[] selectionArgs = {String.valueOf(movieId)};
-        Uri uri = FavouriteMoviesContract.FavouriteMovieEntry.buildFavouriteUriWithMovieId(movieId);
+        Uri uri = FavouriteMovieEntry.buildFavouriteUriWithMovieId(movieId);
         Cursor cursor = getActivity().getContentResolver().query(uri,
                 null,
-                FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_MOVIE_ID + "=?",
+                FavouriteMovieEntry.COLUMN_MOVIE_ID + "=?",
                 selectionArgs,
                 null);
         if (null != cursor && cursor.getCount() != 0) {
@@ -250,20 +236,21 @@ public class MovieDetailFragment extends Fragment {
                 return true;
             case R.id.action_favourite:
                 if (checkFavourite(mMovie.getId())) {
-                    Uri removeFavouriteUri = FavouriteMoviesContract.FavouriteMovieEntry.buildFavouriteUriWithMovieId(mMovie.getId());
+                    Uri removeFavouriteUri = FavouriteMovieEntry.buildFavouriteUriWithMovieId(mMovie.getId());
                     getActivity().getContentResolver().delete(removeFavouriteUri, null, null);
                     Toast.makeText(getActivity().getBaseContext(), mFavOffToastMsg, Toast.LENGTH_LONG).show();
                     item.setIcon(R.drawable.ic_star_border_white);
                 } else {
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_BACKDROP_PATH, mMovie.getBackdropPath());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_POSTER_PATH, mMovie.getPosterPath());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_OVERVIEW, mMovie.getOverview());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_TITLE, mMovie.getOriginalTitle());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
-                    contentValues.put(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_VOTE_AVERAGE, mMovie.getVoteAverage());
-                    Uri favouriteUri = getActivity().getContentResolver().insert(FavouriteMoviesContract.FavouriteMovieEntry.CONTENT_URI, contentValues);
+                    contentValues.put(FavouriteMovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_BACKDROP_PATH, mMovie.getBackdropPath());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_POSTER_PATH, mMovie.getPosterPath());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_OVERVIEW, mMovie.getOverview());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_TITLE, mMovie.getOriginalTitle());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
+                    contentValues.put(FavouriteMovieEntry.COLUMN_VOTE_AVERAGE, mMovie.getVoteAverage());
+                    Uri favouriteUri = getActivity().getContentResolver()
+                            .insert(FavouriteMovieEntry.CONTENT_URI, contentValues);
 
                     if (null != favouriteUri) {
                         Toast.makeText(getActivity().getBaseContext(), mFavOnToastMsg, Toast.LENGTH_LONG).show();

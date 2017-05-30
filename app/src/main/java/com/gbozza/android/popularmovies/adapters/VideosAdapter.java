@@ -44,7 +44,6 @@ import butterknife.ButterKnife;
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdapterViewHolder> {
 
     private List<Video> mVideoList;
-    private Context mContext;
     @BindString(R.string.movie_detail_youtube_thumbnail_service) String mDetailVideoYoutubeThumb;
     @BindString(R.string.movie_detail_youtube_vendor) String mDetailVideoYoutubeVendor;
     @BindString(R.string.movie_detail_youtube_video_link) String mDetailVideoYoutubeVideoLink;
@@ -71,9 +70,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
 
     @Override
     public VideosAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        mContext = viewGroup.getContext();
         int layoutIdForListItem = R.layout.videos_view;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);

@@ -25,10 +25,18 @@ import android.view.MenuItem;
 
 import com.gbozza.android.popularmovies.R;
 
+import butterknife.BindString;
+
 /**
  * The entry point Activity of the Application
  */
 public class MovieGridActivity extends AppCompatActivity {
+
+    @BindString(R.string.pref_sorting_key) String mPrefSortingKey;
+    @BindString(R.string.pref_sorting_default) String mPrefSortingDefault;
+    @BindString(R.string.pref_sorting_popular_value) String mPrefSortingPopularValue;
+    @BindString(R.string.pref_sorting_rated_value) String mPrefSortingRatedValue;
+    @BindString(R.string.pref_sorting_favourites_value) String mPrefSortingFavouritesValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,4 +61,5 @@ public class MovieGridActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

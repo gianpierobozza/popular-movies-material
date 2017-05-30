@@ -45,6 +45,8 @@ import com.gbozza.android.popularmovies.models.Movie;
 import com.gbozza.android.popularmovies.utilities.BottomRecyclerViewScrollListener;
 import com.gbozza.android.popularmovies.utilities.MovieDbJsonUtilities;
 import com.gbozza.android.popularmovies.utilities.NetworkUtilities;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONObject;
 
@@ -62,6 +64,7 @@ import butterknife.ButterKnife;
  * A Class that extends Fragment to implement the Movie List structure
  */
 public class MovieGridFragment extends Fragment implements
+        View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -71,6 +74,9 @@ public class MovieGridFragment extends Fragment implements
     @BindView(R.id.pb_loading_indicator) ProgressBar mLoadingIndicator;
     @BindView(R.id.tv_error_message_display) TextView mErrorMessageDisplay;
     @BindView(R.id.sr_swipe_container) SwipeRefreshLayout mSwipeContainer;
+    @BindView(R.id.button_popular) FloatingActionButton mFabPopular;
+    @BindView(R.id.button_rated) FloatingActionButton mFabRated;
+    @BindView(R.id.button_favourites) FloatingActionButton mFabFavourites;
     @BindString(R.string.pref_sorting_key) String mPrefSortingKey;
     @BindString(R.string.pref_sorting_default) String mPrefSortingDefault;
     @BindString(R.string.pref_sorting_popular_value) String mPrefSortingPopularValue;
@@ -95,6 +101,7 @@ public class MovieGridFragment extends Fragment implements
 
     private static final int ID_FAVOURITES_LOADER = 33;
 
+    public static FloatingActionsMenu mMenuMultipleActionsUp;
     public static final String[] FAVOURITE_MOVIES_PROJECTION = {
             FavouriteMovieEntry.COLUMN_MOVIE_ID,
             FavouriteMovieEntry.COLUMN_BACKDROP_PATH,
@@ -154,6 +161,11 @@ public class MovieGridFragment extends Fragment implements
         });
         mSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
+        mMenuMultipleActionsUp = (FloatingActionsMenu) rootView.findViewById(R.id.multiple_actions_up);
+        mFabPopular.setOnClickListener(this);
+        mFabRated.setOnClickListener(this);
+        mFabFavourites.setOnClickListener(this);
+
         if (null != savedInstanceState && !errorShown) {
             ArrayList<Movie> movieList = savedInstanceState.getParcelableArrayList(BUNDLE_MOVIES_KEY);
             mMoviesAdapter.setMoviesData(movieList);
@@ -201,11 +213,41 @@ public class MovieGridFragment extends Fragment implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {}
 
     /**
+     * This method handles the FAB menu item clicks
+     *
+     * @param view the view associated with the fragment
+     */
+    @Override
+    public void onClick(View view) {
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        clearGridView();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        switch (view.getId()) {
+            case R.id.button_popular:
+                mSorting = SORTING_POPULAR;
+                editor.putString(mPrefSortingKey, mPrefSortingPopularValue);
+                break;
+            case R.id.button_rated:
+                mSorting = SORTING_RATED;
+                editor.putString(mPrefSortingKey, mPrefSortingRatedValue);
+                break;
+            case R.id.button_favourites:
+                mSorting = SORTING_FAVOURITES;
+                editor.putString(mPrefSortingKey, mPrefSortingFavouritesValue);
+                break;
+        }
+        editor.apply();
+        loadCards();
+        mMenuMultipleActionsUp.collapse();
+    }
+
+    /**
      * A method that invokes the AsyncTask to populate the RecyclerView,
      * it's based on the sorting option selected by the user. Default is "most popular"
      */
     public void loadCards() {
-        if (mSwipeContainer.isRefreshing()) {
+        if (null != mSwipeContainer && mSwipeContainer.isRefreshing()) {
             mSwipeContainer.setRefreshing(false);
         }
         if (NetworkUtilities.isOnline(mContext)) {

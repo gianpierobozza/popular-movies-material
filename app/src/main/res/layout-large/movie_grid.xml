@@ -51,6 +51,8 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
+        <include layout="@layout/fab_layout" />
+
     </FrameLayout>
 
     <FrameLayout
